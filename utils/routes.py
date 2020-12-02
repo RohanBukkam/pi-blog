@@ -1,13 +1,21 @@
+from flask_login import login_required
+
 from utils.models import User
 from utils import login_manager, app, logout_user, current_user, login_user, db
 from utils.oauth import OAuthSignIn
 from flask import render_template, redirect, url_for, flash
+from utils.forms import PostForm
+from utils.models import Post
 
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+@app.route('/home')
+def home():
+    posts = Post.query.all()
+    return render_template('home.html')
 
 @app.route('/')
 def index():
@@ -48,3 +56,17 @@ def oauth_callback(provider):
     # Log in the user, by default remembering them for their next visit unless they log out.
     login_user(user, remember=True)
     return redirect(url_for('index'))
+
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, user_id=current_user.id)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Post',
+                           form=form, legend='New Post')
