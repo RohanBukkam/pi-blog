@@ -2,7 +2,7 @@ from utils import UserMixin, app, db, login_manager
 
 class User(UserMixin, db.Model):
     #__tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     social_id = db.Column(db.String(64), nullable=False, unique=True)
     email_id = db.Column(db.String(64), nullable=True)
     name = db.Column(db.String(64), nullable=False)

@@ -42,7 +42,7 @@ def oauth_callback(provider):
     user = User.query.filter_by(social_id=social_id).first()
     if not user:
         # Create the user.
-        user = User(social_id=social_id, name=name, username=username, email=email, profile_picture=profile_picture)
+        user = User(social_id=social_id, name=name, username=username, email_id=email, profile_picture=profile_picture)
         db.session.add(user)
         db.session.commit()
     # Log in the user, by default remembering them for their next visit unless they log out.
