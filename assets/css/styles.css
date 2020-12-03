@@ -1,0 +1,67 @@
+html,body{
+      height: 100%!important;
+      width: 100%!important;
+      font-family: 'Metrophobic', sans-serif;
+}
+
+.btn-grad {background-image: linear-gradient(to right, #FF512F 0%, #F09819  51%, #FF512F  100%)!important;}
+.btn-grad {
+      border: 0px!important;
+      margin: 10px!important;
+      padding: 15px 45px!important;
+      text-align: center!important;
+      text-transform: uppercase!important;
+      transition: 0.5s!important;
+      background-size: 200% auto!important;
+      color: white!important;            
+      box-shadow: 0 0 20px #eee!important;
+      border-radius: 50px!important;
+}
+
+.btn-grad:hover {
+      background-position: right center!important; /* change the direction of the change here */
+      color: #fff!important;
+      text-decoration: none!important;
+}
+
+.text-grad{
+      background: linear-gradient(to right, #FF512F 0%, #F09819  100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+}
+
+
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) { 
+      .oauth-buttons{
+            margin: 0px!important;
+      }
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) { 
+      .oauth-buttons{
+            margin: 0px!important;
+      }
+}
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) { 
+      .left-section,.right-section{
+            height: auto;
+            display: block;
+      }
+      .oauth-buttons{
+            margin: 0px!important;
+      }
+}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+      
+}
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+      
+}
