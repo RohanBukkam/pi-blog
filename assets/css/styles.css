@@ -24,6 +24,26 @@ html,body{
       text-decoration: none!important;
 }
 
+.blog-btn-grad {background-image: linear-gradient(to right, #FF512F 0%, #f06f19  51%, #FF512F  100%)!important;}
+.blog-btn-grad {
+      border: 0px!important;
+      margin: 0px!important;
+      padding: 10px 35px!important;
+      text-align: center!important;
+      text-transform: uppercase!important;
+      transition: 0.5s!important;
+      background-size: 200% auto!important;
+      color: white!important;            
+      box-shadow: 0 0 20px #eee!important;
+      border-radius: 5px!important;
+}
+
+.blog-btn-grad:hover {
+      background-position: right center!important; /* change the direction of the change here */
+      color: #fff!important;
+      text-decoration: none!important;
+}
+
 .text-grad{
       background: linear-gradient(to right, #FF512F 0%, #F09819  100%);
       -webkit-background-clip: text;
@@ -64,4 +84,44 @@ html,body{
 /* // Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { 
       
+}
+
+
+/* width */
+::-webkit-scrollbar {
+      width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+      background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #FF512F 0%, #F09819  100%);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+      background: #555;
+}
+
+.active{
+      font-weight: bold!important;
+}
+
+.card-title{
+      font-size: 25px;
+}
+
+.card-img-top{
+      min-height: 120px;
+      max-height: 200px;
+      width: auto;
+      background-attachment: fixed;;
+}
+
+.badge{
+      line-height: unset;
 }
