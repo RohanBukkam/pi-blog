@@ -1,5 +1,6 @@
 from utils import UserMixin, app, db, login_manager
 from datetime import datetime
+# import flask_whooshalchemy as wa
 
 
 class User(UserMixin, db.Model):
@@ -18,6 +19,7 @@ def load_user(id):
 
 
 class Post(db.Model):
+    __searchable__ = ['title', 'content']
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -28,4 +30,5 @@ class Post(db.Model):
         return f"Post('{self.title}', '{self.date_posted}')"
 
 
+# wa.whoosh_index(app, Post)
 db.create_all()

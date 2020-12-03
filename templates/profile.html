@@ -1,8 +1,6 @@
-  
 {% extends "layout.html" %}
 {% block content %}
-        <h1>This is home</h1>
-        <h5><a href="{{ url_for('profile') }}">Profile</a></h5>
+        <h1>This is Profile</h1>
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-insert">
                 <h4>Search</h4>
@@ -15,18 +13,20 @@
                 </form>
             </div>
         </div>
-        <p><a href="{{ url_for('new_post') }}">Create Post</a></p>
-        {% for post in posts %}
-        <article class="media content-section">
 
-          <div class="media-body">
-            <div class="article-metadata">
-              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-            </div>
-            <h2 class="article-title" style="color:blue">{{ post.title }}</h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
+        {% for post in posts %}
+          {% if post.user_id== uid %}
+            <article class="media content-section">
+
+              <div class="media-body">
+                <div class="article-metadata">
+                  <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <h2 class="article-title" style="color:blue">{{ post.title }}</h2>
+                <p class="article-content">{{ post.content }}</p>
+                <button><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">Edit</a></button>
+              </div>
+            </article>
+          {% endif %}
         {% endfor %}
-        <p><a href="{{ url_for('database') }}">database</a></p>
 {% endblock content %}

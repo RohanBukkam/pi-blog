@@ -13,5 +13,6 @@ login_manager.login_view = 'index'
 # Session config
 app.config['SESSION_COOKIE_NAME'] = 'google-login-session'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
+# app.config['WHOOSH_BASE'] = 'whoosh'
 
 from utils import routes
