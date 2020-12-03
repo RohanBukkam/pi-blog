@@ -20,7 +20,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/authorize/<provider>')
+@app.route('/login/authorize/<provider>')
 def oauth_authorize(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
@@ -28,7 +28,7 @@ def oauth_authorize(provider):
     return oauth.authorize()
 
 
-@app.route('/callback/<provider>')
+@app.route('/login/callback/<provider>')
 def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('index'))
