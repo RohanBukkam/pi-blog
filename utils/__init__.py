@@ -6,7 +6,7 @@ import os
 
 # App config
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
-app.config.from_pyfile('config.cfg')
+#app.config.from_pyfile('config.cfg')
 
 # Google Cloud SQL (change this accordingly)
 PASSWORD = os.environ.get('PASSWORD')
