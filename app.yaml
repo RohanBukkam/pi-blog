@@ -1,17 +1,26 @@
-runtime: python37
-#env: flex
+runtime: python
+env: flex
 entrypoint: gunicorn -b :$PORT main:app #--timeout 120 --preload
 
-#runtime_config:
-#  python_version: 3
+runtime_config:
+  python_version: 3
 
 beta_settings:
-    cloud_sql_instances: pi-blog:asia-south1:pi-blog-sql-instance
+  cloud_sql_instances: pi-blog:asia-south1:pi-blog-sql-instance
 
 env_variables:
   SECRET_KEY: 'cae026144a2b6e099648e464b1457bca'
-  SQLALCHEMY_DATABASE_URI: 'mysql+pymysql://root:GoB3rOvuuEaiuoLt@127.0.0.1/pi_blog_db?unix_socket=/cloudsql/pi-blog:asia-south1:pi-blog-sql-instance'
+#  SQLALCHEMY_DATABASE_URI: 'mysql+pymysql://root:GoB3rOvuuEaiuoLt@127.0.0.1/pi_blog_db?unix_socket=/cloudsql/pi-blog:asia-south1:pi-blog-sql-instance'
   CLOUD_SQL_CONNECTION_NAME: 'pi-blog:asia-south1:pi-blog-sql-instance'
+  PASSWORD: "GoB3rOvuuEaiuoLt"
+  PUBLIC_IP_ADDRESS: "35.244.41.49"
+  DBNAME: "pi_blog_db"
+  PROJECT_ID: "pi-blog"
+  INSTANCE_NAME: "pi-blog:asia-south1:pi-blog-sql-instance"
+  GOOGLE_LOGIN_CLIENT_ID: "1049240749598-hni6h1kpt6obnknff40vbfquc99rumbl.apps.googleusercontent.com"
+  GOOGLE_LOGIN_CLIENT_SECRET: "WwwWKevFwgThmDhnpcfkcpIt"
+  SQLALCHEMY_TRACK_MODIFICATIONS: 'False'
+
 
 #includes:
 #- credentials.yaml

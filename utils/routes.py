@@ -13,6 +13,9 @@ def load_user(id):
 def index():
     return render_template('index.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
@@ -23,7 +26,7 @@ def logout():
 @app.route('/login/authorize/<provider>')
 def oauth_authorize(provider):
     if not current_user.is_anonymous:
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     oauth = OAuthSignIn.get_provider(provider)
     return oauth.authorize()
 
@@ -37,7 +40,7 @@ def oauth_callback(provider):
     if social_id is None:
         # I need a valid email address for my user identification
         flash('Authentication failed.')
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     # Look if the user already exists
     user = User.query.filter_by(social_id=social_id).first()
     if not user:
