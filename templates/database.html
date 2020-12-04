@@ -48,5 +48,29 @@
         <br>
         </tr>
     {% endfor %}
+
+    {% for comment in comments %}
+            <tr>
+              <td>
+                {{comment.comment_id}}
+              </td>&emsp;
+              <td>
+                {{comment.content}}
+              </td>&emsp;
+              <td>
+                {{comment.comment_date}}
+              </td>&emsp;
+              <td>
+                {{comment.user_id}}
+              </td>&emsp;
+              <td>
+                {{comment.post_id}}
+              </td>&emsp;
+               <td>
+                {{comment.sentiment}}
+              </td>&emsp;
+            <br>
+            </tr>
+        {% endfor %}
 </body>
 </html>

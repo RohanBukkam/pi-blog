@@ -1,11 +1,10 @@
 from flask_login import login_required
 
-from utils.models import User
+from utils.models import User, Post, Comment
 from utils import login_manager, app, logout_user, current_user, login_user, db
 from utils.oauth import OAuthSignIn
 from flask import render_template, redirect, url_for, flash, request, abort
-from utils.forms import PostForm
-from utils.models import Post
+from utils.forms import PostForm, AddCommentForm
 
 
 @login_manager.user_loader
@@ -60,6 +59,12 @@ def oauth_callback(provider):
     return redirect(url_for('index'))
 
 
+@app.route('/home/view_post/<int:post_id>')
+def view_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('view_post.html', post=post)
+
+
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -86,7 +91,7 @@ def profile():
 @app.route("/profile/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post.html', post=post)
 
 
 @app.route("/profile/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -109,7 +114,7 @@ def update_post(post_id):
                            form=form, legend='Update Post')
 
 
-@app.route("/profile/post/<int:post_id>/delete", methods=['POST'])
+@app.route("/profile/post/<int:post_id>/delete", methods=['GET', 'POST'])
 @login_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -120,12 +125,28 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('profile'))
 
+
+@app.route("/post/<int:post_id>/comment", methods=['GET', 'POST'])
+@login_required
+def comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = AddCommentForm()
+    if form.validate_on_submit():
+        comment = Comment(content=form.content.data, post_id=post.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Your comment has been added to the post", "success")
+        return redirect(url_for("post", post_id=post.id))
+    return render_template("view_post_comment.html", title="Comment Post", form=form, post=post)
+
+
 @app.route('/database')
 def database():
     posts = Post.query.all()
     users = User.query.all()
     uid = current_user.id
-    return render_template('database.html', posts=posts, users=users, uid=uid)
+    comments = Comment.query.all()
+    return render_template('database.html', posts=posts, users=users, uid=uid, comments=comments)
 
 # @app.route('/home/search')
 # def search():

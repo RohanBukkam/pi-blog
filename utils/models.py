@@ -1,5 +1,7 @@
 from utils import UserMixin, app, db, login_manager
 from datetime import datetime
+
+
 # import flask_whooshalchemy as wa
 
 
@@ -28,6 +30,15 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    sentiment = db.Column(db.Boolean, default=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
 
 # wa.whoosh_index(app, Post)
