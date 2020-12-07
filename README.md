@@ -8,3 +8,6 @@
 > .\venv\Scripts\activate
 > pip install Authlib Flask
 > ```
+
+- Datasets : https://www.kaggle.com/bittlingmayer/amazonreviews
+- Tensorflow Version : 2.2.1
