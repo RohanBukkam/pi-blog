@@ -62,16 +62,16 @@
                                         {% endif %}
                                     </div>
                                     <div class="form-group">
-                                        <label>{{ form.email.label(class="form-control-label") }}</label>
-                                        {% if form.email.errors %}
-                                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                        <label>{{ form.email_id.label(class="form-control-label") }}</label>
+                                        {% if form.email_id.errors %}
+                                        {{ form.email_id(class="form-control form-control-lg is-invalid") }}
                                         <div class="invalid-feedback">
-                                            {% for error in form.email.errors %}
+                                            {% for error in form.email_id.errors %}
                                             <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                         {% else %}
-                                        {{ form.email(class="form-control form-control-lg") }}
+                                        {{ form.email_id(class="form-control form-control-lg") }}
                                         {% endif %}
                                     </div>
                                     <div class="form-group">
