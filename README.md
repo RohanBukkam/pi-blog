@@ -9,4 +9,7 @@
 > pip install Authlib Flask
 > ```
 
+<<<<<<< HEAD
 - Dataset : https://www.kaggle.com/bittlingmayer/amazonreviews
+=======
+>>>>>>> main
