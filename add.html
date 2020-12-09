@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="preconnect" href="https://fonts.gstatic.com">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Metrophobic&family=Montserrat:wght@300;900&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="assets/css/styles.css">
+   <script src="assets/editor/trumbowyg.min.js"></script>
+   <script src="assets/editor/plugins/base64/trumbowyg.base64.min.js"></script>
+   <script src="assets/editor/plugins/allowtagsfrompaste/trumbowyg.allowtagsfrompaste.min.js"></script>
+   <script src="assets/editor/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+   <script src="assets/editor/plugins/colors/trumbowyg.colors.min.js"></script>
+   <script src="assets/editor/plugins/history/trumbowyg.history.min.js"></script>
+   <script src="assets/editor/plugins/"></script>
+   <link rel="stylesheet" href="assets/editor/ui/trumbowyg.min.css">
+   <link rel="stylesheet" href="assets/editor/plugins/colors/ui/trumbowyg.colors.min.css">
+   <title>Add Post - Pi Blog</title>
+</head>
+<body>
+   
+   <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light shadow-sm">
+      <a class="navbar-brand" href="#">
+         <img src="assets/images/persistent-systems-header-logo.png" width="140" class="d-inline-block align-top" alt="">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse mr-auto" id="navbarNavDropdown">
+         <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item active">
+               <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="#">Categories</a>
+            </li> 
+            <li class="nav-item">
+               <a class="nav-link" href="#">My Posts</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="#">Dashboard</a>
+            </li>
+            
+            <li class="nav-item">
+               <a class="nav-link" href="#">Profile</a>
+            </li>
+         </ul>
+      </div>
+   </nav>
+   
+   <div class="row m-0 mt-5">
+      <div class="col-xl-10 mx-auto">                    
+         <h3>Add Post</h3>
+         <div class="row">
+            <input type="hidden" id="postAuthor" value="Jane Doe">
+            <input type="hidden" id="postDate" value="Nov 8. 2020">
+            <div class="col-xl-8">
+               <label for="exampleInputEmail1">Post Content</label>
+               <div class="card" id="editor"></div>                             
+            </div>
+            <div class="col-xl-4">
+               <div class="form-group">
+                  <label for="exampleInputEmail1">Post Title</label>
+                  <input type="email" class="form-control" id="postTitle" aria-describedby="emailHelp" placeholder="">
+               </div>
+               <div class="input-group mb-3">
+                  <div class="input-group"> 
+                     <label for="inputGroupSelect01">Post Category</label>
+                     <!-- <label class="input-group-text" for="inputGroupSelect01">Select Category</label> -->
+                  </div>
+                  <select class="custom-select" id="postCategory">
+                     <option selected>Choose...</option>
+                     <option value="1">One</option>
+                     <option value="2">Two</option>
+                     <option value="3">Three</option>
+                  </select>
+               </div>
+               <div class="text-center mx-auto mt-4 mb-2">
+                  <a href="#" onclick="postPreview.preview()" class="mx-auto btn blog-blue-btn-grad btn-primary">PREVIEW</a>
+                  <a href="#" class="mx-auto btn blog-btn-grad btn-primary">POST</a>
+               </div>
+            </div>
+         </div>      
+      </div>
+   </div>
+   
+   <div class="modal fade" tabindex="-1" role="dialog" id="preview-modal">
+      <div class="modal-dialog  modal-lg" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title">Post Preview</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <div class="card">
+                  <div class="card-body">
+                     <h3 class="card-title" id="previewPostTitle">How AWS managed to get the quantum CPU's to scale on demand?</h3>
+                     <p class="card-text ">
+                        
+                        <div class="d-flex">
+                           <small class="text-muted text-truncate" style="max-width: 33%;" id="previewPostCategory">AWS </small><small class="px-2">|</small>
+                           <small class="text-muted text-truncate" style="max-width: 33%;" id="previewPostAuthor">John Doe</small><small class="px-2">|</small>
+                           <small class="text-muted text-truncate" style="max-width: 33%;" id="previewPostDate">30 Nov. 2020</small>  
+                        </div>
+                        <div class="d-flex pt-2">
+                           <span class="badge badge-pill badge-info text-truncate px-3" data-toggle="tooltip" data-placement="top" title="Tooltip on top" id="previewPostTimer"></span>
+                        </div>
+                     </p>
+                     <p class="card-text" id="previewPost">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis ligula et quam maximus, eu sagittis augue suscipit. Curabitur id magna vel ipsum fermentum tempor ac mattis arcu. Donec sed ex quam. Quisque vitae lorem odio. Cras id tempor est, vestibulum pharetra mi. Nullam ullamcorper, velit in lacinia venenatis, urna ipsum ultrices quam, a maximus felis tellus non nunc. Aenean euismod elementum ipsum. Nulla fringilla ex porta ipsum cursus sodales vitae eu sapien. In gravida elementum felis sit amet faucibus. Sed commodo nulla mauris, sit amet euismod metus vulputate sed. Vestibulum id leo convallis, vehicula neque eu, ultricies justo. Donec lacus elit, bibendum non sollicitudin ut, lobortis eget mauris. Donec malesuada aliquet felis eget commodo. Duis dolor metus, dictum eu suscipit in, vulputate quis sapien. Nam vestibulum nisl non eros fermentum, quis ullamcorper urna ullamcorper.
+                        <br><br>
+                        Pellentesque sagittis elementum erat, vel mollis nisl. Aenean quis gravida justo, et tincidunt justo. Sed varius bibendum dolor in convallis. Fusce ut pretium magna. Morbi cursus pulvinar lacinia. Aliquam quam mauris, viverra non pharetra in, finibus ut erat. In hac habitasse platea dictumst. Aenean a tortor porta risus convallis malesuada at at nisi.
+                        <br><br>
+                        Morbi aliquet scelerisque felis, ut feugiat diam elementum in. Phasellus varius maximus erat, in feugiat ex varius in. Sed commodo aliquam leo. Nulla vulputate iaculis nunc. In facilisis viverra arcu, in imperdiet mi aliquet mattis. Mauris metus enim, gravida at lacinia eget, pellentesque vel nisi. Aenean faucibus tellus ac laoreet bibendum. Phasellus tempus massa ut leo iaculis, nec pharetra arcu venenatis. Praesent suscipit, lacus non lobortis rutrum, tortor augue semper dolor, nec maximus arcu diam et purus. Sed ut molestie felis, ut commodo tellus. Vestibulum lobortis finibus eros a pharetra. Duis vel enim a dui sodales porttitor a pharetra diam. Nullam non justo ornare, varius turpis vitae, sagittis enim.
+                        <br><br>
+                        Aliquam tellus mauris, sollicitudin ut neque nec, aliquam porttitor risus. Nunc sollicitudin interdum lectus, sed consequat sapien luctus non. Proin pharetra fermentum felis, in dapibus velit finibus a. Maecenas lacinia lectus in tellus luctus, eget consequat purus condimentum. Vivamus finibus turpis ante, id vehicula orci interdum at. Sed vitae rutrum libero. Maecenas euismod tellus lacus, a pretium erat porta quis. Curabitur lectus enim, malesuada vitae ultricies ac, posuere a ligula. Aliquam sollicitudin erat vel sapien cursus, congue lobortis ligula imperdiet. Nunc luctus est id tellus dapibus, non ultrices nulla fermentum.
+                        <br><br>                     
+                        Pellentesque id nisi eu sapien pulvinar facilisis. Integer non dapibus odio. Phasellus sagittis enim eu varius varius. Pellentesque eu nunc fermentum, porttitor turpis at, elementum eros. In hac habitasse platea dictumst. Nullam eu lectus vitae nisl eleifend tincidunt quis vel neque. Suspendisse suscipit sagittis arcu, porttitor sagittis odio pretium ac. Nunc mattis vel magna non varius. Cras sit amet est porttitor, rhoncus sem a, consequat massa. Integer et consectetur dolor.
+                     </p>
+                  </div>
+               </div> 
+            </div>
+            
+         </div>
+      </div>
+   </div>
+</div>
+</div>
+
+</div>
+
+<script>
+   const editorOptions= {
+      tagsToRemove: ['script', 'link'],
+      imageWidthModalEdit: true,
+      btnsDef: {
+         // Create a new dropdown
+         image: {
+            dropdown: ['base64', 'insertImage'],
+            ico: 'insertImage'
+         }
+      },
+      btns: [
+      ['viewHTML'],
+      ['formatting'],
+      ['foreColor', 'backColor'],
+      ['strong', 'em', 'del'],
+      ['superscript', 'subscript'],
+      ['link'],
+      ['image'], // Our fresh created dropdown
+      ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+      ['unorderedList', 'orderedList'],
+      ['horizontalRule'],
+      ['removeformat'],
+      ['fullscreen'],
+      ['fontsize'],
+      ['highlight'],
+      ['historyUndo', 'historyRedo'],
+      ],
+      autogrow: true
+   }
+   $('#editor').trumbowyg(editorOptions);
+</script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/read-time.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+</body>
+</html>

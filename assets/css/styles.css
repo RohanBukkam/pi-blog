@@ -44,6 +44,26 @@ html,body{
       text-decoration: none!important;
 }
 
+.blog-blue-btn-grad {background-image: linear-gradient(to right, #064ead 0%, #041785  51%, #064ead  100%)!important;}
+.blog-blue-btn-grad {
+      border: 0px!important;
+      margin: 0px!important;
+      padding: 10px 35px!important;
+      text-align: center!important;
+      text-transform: uppercase!important;
+      transition: 0.5s!important;
+      background-size: 200% auto!important;
+      color: white!important;            
+      box-shadow: 0 0 20px #eee!important;
+      border-radius: 5px!important;
+}
+
+.blog-blue-btn-grad:hover {
+      background-position: right center!important; /* change the direction of the change here */
+      color: #fff!important;
+      text-decoration: none!important;
+}
+
 .text-grad{
       background: linear-gradient(to right, #FF512F 0%, #F09819  100%);
       -webkit-background-clip: text;
@@ -119,9 +139,52 @@ html,body{
       min-height: 120px;
       max-height: 200px;
       width: auto;
+      object-fit: cover;
       background-attachment: fixed;;
 }
 
 .badge{
       line-height: unset;
+}
+
+.custom-blog-card-footer{
+      padding: 0px;
+      /* background: #636363; */
+      /* border-radius: 0px!important; */
+}
+
+.custom-blog-card-footer > .btn{
+      border-radius: 0px!important;
+}
+
+.btn-group > .btn:first-child {
+      border-bottom-left-radius: .25rem!important;
+}
+
+.btn-group > .btn:last-child {
+      border-bottom-right-radius: .25rem!important;
+}
+
+.like-button:hover,.comments-button:hover,.share-button:hover{
+      background: linear-gradient(to right, #FF512F 0%, #f06f19 100%);
+      color: white;
+}
+
+.like-button{
+      border: 0px;
+      color: white;
+      text-align: center;
+      background:white;
+}
+
+.comments-button{
+      border: 0px;
+      color: white;
+      background:white;
+}
+
+.share-button{
+      border: 0px;
+      color: white;
+      background:white;
 }
