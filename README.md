@@ -8,3 +8,5 @@
 > .\venv\Scripts\activate
 > pip install Authlib Flask
 > ```
+
+- Dataset : https://www.kaggle.com/bittlingmayer/amazonreviews
