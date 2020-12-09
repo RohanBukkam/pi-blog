@@ -4,14 +4,15 @@ from datetime import datetime
 class User(UserMixin, db.Model):
     # __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    social_id = db.Column(db.String(64), nullable=False, unique=True)
+    social_id = db.Column(db.String(64), nullable=True, unique=True)
     email_id = db.Column(db.String(64), nullable=True)
     name = db.Column(db.String(64), nullable=False)
     username = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=True, unique=True)
     profile_picture = db.Column(db.String(500), nullable=False, default='default.jpg')
-    post = db.relationship('Post', backref='user')
-    comment = db.relationship('Comment', backref='user')
+    post = db.relationship('Post', backref='user', passive_deletes=True)
+    comment = db.relationship('Comment', backref='user', passive_deletes=True)
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -24,10 +25,10 @@ class Post(db.Model):
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     likes = db.Column(db.Integer, nullable=False, default=0)
     category = db.Column(db.String(60), nullable=False, default='General')
-    comment = db.relationship('Comment', backref='post')
+    comment = db.relationship('Comment', backref='post', passive_deletes=True)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
@@ -38,8 +39,8 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     sentiment = db.Column(db.Boolean, default=False, index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False)
 
 #Schemas for the table for flask_marshmallow
 class UserSchema(ma.SQLAlchemyAutoSchema):

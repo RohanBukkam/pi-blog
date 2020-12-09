@@ -6,29 +6,24 @@ from flask import render_template, redirect, url_for, flash, request, abort
 from utils.forms import PostForm, AddCommentForm
 import json
 
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
 
-
-#
-# @app.route('/home')
-# def home():
-#     posts = Post.query.all()
-#     return render_template('home.html', posts=posts)
-#
-
 @app.route('/')
 @app.route('/index')
 def index():
     posts = Post.query.all()
-    return render_template('home.html', posts=posts)
+    return render_template('home.html', posts=posts, title='Home')
+
 
 @app.route('/login')
 def login():
     next_page = request.args.get('next')
     return render_template('login.html', next_page=next_page)
+
 
 @app.route('/logout')
 def logout():
@@ -65,28 +60,29 @@ def oauth_callback(provider):
     login_user(user, remember=True)
     return redirect(url_for('index'))
 
+
 @app.route('/post/<int:post_id>')
 def view_post(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comment.query.filter_by(post_id=post_id)
     # comment_schema = CommentSchema(many=True)
     # json_comment_list = comment_schema.dump(comments)
-    return render_template('view_post.html', post=post, comments=comments) #, json_comment_list=make_response(jsonify({'result': 'success', 'comments': json_comment_list}), 200))
+    return render_template('post.html', post=post,
+                           comments=comments)  # , json_comment_list=make_response(jsonify({'result': 'success', 'comments': json_comment_list}), 200))
 
-    #return jsonify({'ouput': output, 'result':'succsess'})
 
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, user_id=current_user.id)
+    if request.method == 'POST':
+        title = request.form.get('postTitle')
+        category = request.form.get('postCategory')
+        content = request.form.get('editor')
+        post = Post(title=title, content=content, user_id=current_user.id, category=category)
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
-        return redirect(url_for('index'))
-    return render_template('create_post.html', title='New Post',
-                           form=form, legend='New Post')
+        return render_template('post.html', post=post)
+    return render_template('create_post.html', title='New Post', legend='New Post')
 
 
 @app.route('/profile/post')
@@ -109,18 +105,22 @@ def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.user_id != current_user.id:
         abort(403)
-    form = PostForm()
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
+    if request.method == 'POST':
+        title = request.form.get('postTitle')
+        category = request.form.get('postCategory')
+        content = request.form.get('editor')
+        post = Post.query.filter_by(id=post_id).first()
+        post.title = title
+        post.category = category
+        post.content = content
         db.session.commit()
-        flash('Your post has been updated!', 'success')
-        return redirect(url_for('profile'))
+        return redirect(url_for('view_post', post_id=post.id))
     elif request.method == 'GET':
-        form.title.data = post.title
-        form.content.data = post.content
-    return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
+        title = post.title
+        post_data = {'title': post.title, 'category': post.category, 'content': post.content}
+        return render_template('create_post.html', title='Update Post',
+                               post_data=[post.id, post.title, post.category, post.content],
+                               legend='Update Post')
 
 
 @app.route("/profile/post/<int:post_id>/delete", methods=['GET', 'POST'])
@@ -129,17 +129,20 @@ def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.user_id != current_user.id:
         abort(403)
+    # Delete its comment first then delete the post
+    for comment in post.comment:
+        db.session.delete(comment)
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
-    return redirect(url_for('profile'))
+    return redirect(url_for('myPosts'))
 
 
 @app.route("/post/<int:post_id>/addcomment", methods=['GET', 'POST'])
 @login_required
 def comment(post_id):
     post = Post.query.get_or_404(post_id)
-    comment = Comment(content=request.form['commentContent'],post_id=post.id, user_id=current_user.id)
+    comment = Comment(content=request.form['commentContent'], post_id=post.id, user_id=current_user.id)
     db.session.add(comment)
     db.session.commit()
     flash("Your comment has been added to the post", "success")
@@ -153,7 +156,7 @@ def comment(post_id):
             {'user_id': comments[i].user.id, 'name': comments[i].user.name, 'username': comments[i].user.username,
              'comment_id': comments[i].id})
     return jsonify({'result': 'success', 'comments': json_comment_list, 'owners': json_comment_owner_list})
-    # return render_template("view_post_comment.html", title="Comment Post", form=form, post=post)
+
 
 @app.route("/post/<int:post_id>/getcomment", methods=['GET', 'POST'])
 def get_comments(post_id):
@@ -162,20 +165,25 @@ def get_comments(post_id):
     json_comment_list = comment_schema.dump(comments)
     json_comment_owner_list = []
     for i in range(len(json_comment_list)):
-        json_comment_owner_list.append({'user_id': comments[i].user.id, 'name':comments[i].user.name, 'username':comments[i].user.username, 'comment_id':comments[i].id})
+        json_comment_owner_list.append(
+            {'user_id': comments[i].user.id, 'name': comments[i].user.name, 'username': comments[i].user.username,
+             'comment_id': comments[i].id})
     return jsonify({'result': 'success', 'comments': json_comment_list, 'owners': json_comment_owner_list})
 
-@app.route('/database')
-@login_required
-def database():
-    posts = Post.query.all()
-    users = User.query.all()
-    uid = current_user.id
-    comments = Comment.query.all()
-    return render_template('database.html', posts=posts, users=users, uid=uid, comments=comments)
 
 # @app.route('/home/search')
 # def search():
 #     posts = Post.query.whoosh_search(request.args.get('query')).all()
 #
 #     return render_template('home.html', posts=posts)
+
+@app.route('/categories')
+def categories():
+    return render_template('categories.html', title='Categories')
+
+
+@app.route('/myPosts')
+@login_required
+def myPosts():
+    posts = Post.query.filter_by(user_id=current_user.id).all()
+    return render_template('myPosts.html', posts=posts, title='My posts')

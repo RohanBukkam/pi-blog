@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="row m-0 mt-5">
+        <div class="col-xl-10 mx-auto">
+            <div class="row">
+
+                <div class="col-lg-9">
+
+                    <div class="row">
+
+                        {% for post in posts|reverse %}
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <p class="card-text ">
+                                        <div class="d-flex">
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.category }} </small><small
+                                                class="px-2">|</small>
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.user.name }}
+                                            </small><small class="px-2">|</small>
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.date_posted.strftime('%d %b, %Y') }}</small>
+                                        </div>
+                                        </p>
+                                        <p class="card-text">Some quick example text to build on the card title and make
+                                            up the
+                                            bulk of the card's content.</p>
+                                        <a href="{{ url_for('view_post', post_id=post.id) }}"
+                                           class="btn blog-btn-grad btn-primary">Read More</a>
+                                    </div>
+                                    <div class="btn-group card-footer custom-blog-card-footer" role="group"
+                                         aria-label="Basic example">
+                                        <button type="button" class="btn bg-dark like-button btn-sm m-3"
+                                                style="border-radius: 50px!important;">
+                                            8 Likes
+                                        </button>
+                                        <button type="button" class="btn bg-dark comments-button btn-sm  m-3"
+                                                style="border-radius: 50px!important;">
+                                            20 Comments
+                                        </button>
+                                        <button type="button" class="btn bg-dark share-button btn-sm  m-3"
+                                                style="border-radius: 50px!important;">
+                                            Share
+                                            <i class="material-icons small  align-middle">share</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card">
+                        <img class="card-img-top w-50 mx-auto p-4"
+                             src="https://icon-library.com/images/google-user-icon/google-user-icon-7.jpg"
+                             alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Profile Name</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                of the card's content.</p>
+                            <a href="#" class="btn blog-btn-grad btn-primary">Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

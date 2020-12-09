@@ -1,44 +1,70 @@
 {% extends "layout.html" %}
 {% block content %}
-        <h1>This is home</h1>
-        <h5><a href="{{ url_for('profile') }}">Profile</a></h5>
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-            <div class="sidebar-module sidebar-module-insert">
-                <h4>Search</h4>
-                <form class="form-inline">
-                    <div class="form-group">
-                    <label for="query">Name</label>
-                    <input type="text"  class="form-control"  name="query" id="query">
+    <div class="row m-0 mt-5">
+
+        <div class="col-xl-10 mx-auto">
+            <div class="row">
+
+                <div class="col-lg-9">
+
+                    <div class="row">
+
+                        {% for post in posts|reverse %}
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <p class="card-text ">
+                                        <div class="d-flex">
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.category }} </small><small
+                                                class="px-2">|</small>
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.user.name }}
+                                            </small><small class="px-2">|</small>
+                                            <small class="text-muted text-truncate"
+                                                   style="max-width: 33%;">{{ post.date_posted.strftime('%d %b, %Y') }}</small>
+                                        </div>
+                                        </p>
+                                        <p class="card-text">Some quick example text to build on the card title and make
+                                            up the
+                                            bulk of the card's content.</p>
+                                        <a href="{{ url_for('view_post', post_id=post.id) }}"
+                                           class="btn blog-btn-grad btn-primary">Read More</a>
+                                    </div>
+                                    <div class="btn-group card-footer custom-blog-card-footer" role="group"
+                                         aria-label="Basic example">
+                                        <button type="button" class="btn bg-dark like-button btn-sm m-3"
+                                                style="border-radius: 50px!important;">
+                                            8 Likes
+                                        </button>
+                                        <button type="button" class="btn bg-dark comments-button btn-sm  m-3"
+                                                style="border-radius: 50px!important;">
+                                            20 Comments
+                                        </button>
+                                        <button type="button" class="btn bg-dark share-button btn-sm  m-3"
+                                                style="border-radius: 50px!important;">
+                                            Share
+                                            <i class="material-icons small  align-middle">share</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
+                </div>
+
+                <div class="col-lg-3 d-lg-block d-none">
+                    <ul class="list-group shadow-sm">
+                        <li class="list-group-item"><a class="text-dark" href="#">Technology<span
+                                class="badge badge-danger float-right">New</span></a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">New Arrivals</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">Code Snippets</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">AWS</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">GCP</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-        {% if current_user.is_authenticated %}
-            <p><a href="{{ url_for('new_post') }}">Create Post</a></p>
-            <p><a href="{{ url_for('logout') }}">Logout</a></p>
-        {% endif %}
-
-        {% for post in posts|reverse %}
-        <article class="media content-section">
-
-          <div class="media-body">
-            <div class="article-metadata">
-              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-            </div>
-            <h2 class="article-title" style="color:blue">{{ post.title }}</h2>
-            <p class="article-content">{{ post.content }}</p>
-               <button><a class="article-title" href="{{ url_for('view_post', post_id=post.id) }}">Read more</a></button>
-              <br>
-              <button><a class="article-title" href="{{ url_for('view_post', post_id=post.id) }}">Like</a></button>
-              <button><a class="article-title" href="{{ url_for('comment', post_id=post.id) }}">Comment</a></button>
-              {% if current_user.is_authenticated %}
-              <button><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">Edit</a></button>
-              {% endif %}
-          </div>
-        </article>
-            <br>
-            <br>
-        {% endfor %}
-        <p><a href="{{ url_for('database') }}">database</a></p>
+    </div>
 {% endblock content %}
