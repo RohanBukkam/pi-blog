@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+        <h1>This is Profile</h1>
+        <a class="article-title" href="{{ url_for('index') }}">Home</a>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+            <div class="sidebar-module sidebar-module-insert">
+                <h4>Search</h4>
+                <form class="form-inline">
+                    <div class="form-group">
+                    <label for="query">Name</label>
+                    <input type="text"  class="form-control"  name="query" id="query">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        {% for post in posts %}
+          {% if post.user_id== uid %}
+            <article class="media content-section">
+
+              <div class="media-body">
+                <div class="article-metadata">
+                  <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <h2 class="article-title" style="color:blue">{{ post.title }}</h2>
+                <p class="article-content">{{ post.content }}</p>
+                <button><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">Edit</a></button>
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+{% endblock content %}

@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="row m-0 mt-5">
+        <div class="col-xl-10 mx-auto">
+            <h3>Add Post</h3>
+            {% if legend == 'Update Post' %}
+                <form id="post-form" method="POST" action="{{ url_for('update_post', post_id=post_data[0] ) }}">
+            {% else %}
+                <form id="post-form" method="POST" action="{{ url_for('new_post') }}">
+            {% endif %}
+            <div class="row">
+                <input type="hidden" id="postAuthor" value="{{ current_user.name }}">
+                <input type="hidden" id="postDate" value="{{ now }}">
+                <div class="col-xl-8">
+                    <label for="exampleInputEmail1">Post Content</label>
+                    <div class="card" id="editor" name="editor"></div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Post Title</label>
+                        <input type="email" class="form-control" id="postTitle" name="postTitle"
+                               aria-describedby="emailHelp"
+                               placeholder="">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group">
+                            <label for="inputGroupSelect01">Post Category</label>
+                            <!-- <label class="input-group-text" for="inputGroupSelect01">Select Category</label> -->
+                        </div>
+                        <select class="custom-select" id="postCategory" name="postCategory">
+                            {#                                <option selected>Choose...</option>#}
+                            <option value="General" selected>General</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Politics">Politics</option>
+                        </select>
+                    </div>
+                    <div class="text-center mx-auto mt-4 mb-2">
+                        <a href="#" onclick="postPreview.preview()"
+                           class="mx-auto btn blog-blue-btn-grad btn-primary">PREVIEW</a>
+                        {% if legend == 'Update Post' %}
+                            <a href="javascript:$('#post-form').submit();"
+                               class="mx-auto btn blog-btn-grad btn-primary">UPDATE</a>
+                        {% else %}
+                            <a href="javascript:$('#post-form').submit();"
+                               class="mx-auto btn blog-btn-grad btn-primary">POST</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="preview-modal">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Post Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title" id="previewPostTitle">How AWS managed to get the quantum CPU's to
+                                scale on demand?</h3>
+                            <p class="card-text ">
+
+                            <div class="d-flex">
+                                <small class="text-muted text-truncate" style="max-width: 33%;"
+                                       id="previewPostCategory">AWS </small><small class="px-2">|</small>
+                                <small class="text-muted text-truncate" style="max-width: 33%;" id="previewPostAuthor">John
+                                    Doe</small><small class="px-2">|</small>
+                                <small class="text-muted text-truncate" style="max-width: 33%;" id="previewPostDate">30
+                                    Nov. 2020</small>
+                            </div>
+                            <div class="d-flex pt-2">
+                                <span class="badge badge-pill badge-info text-truncate px-3" data-toggle="tooltip"
+                                      data-placement="top" title="Tooltip on top" id="previewPostTimer"></span>
+                            </div>
+                            </p>
+                            <p class="card-text" id="previewPost">
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const editorOptions = {
+            tagsToRemove: ['script', 'link'],
+            imageWidthModalEdit: true,
+            btnsDef: {
+                // Create a new dropdown
+                image: {
+                    dropdown: ['base64', 'insertImage'],
+                    ico: 'insertImage'
+                }
+            },
+            btns: [
+                ['viewHTML'],
+                ['formatting'],
+                ['foreColor', 'backColor'],
+                ['strong', 'em', 'del'],
+                ['superscript', 'subscript'],
+                ['link'],
+                ['image'], // Our fresh created dropdown
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['removeformat'],
+                ['fullscreen'],
+                ['fontsize'],
+                ['highlight'],
+                ['historyUndo', 'historyRedo'],
+            ],
+            autogrow: true
+        }
+        $('#editor').trumbowyg(editorOptions);
+
+        {# To prepopulate the Posts for updating #}
+        {% if legend == 'Update Post' %}
+            $(window).on('load', function () {
+                var post_data = {{ post_data|safe }};
+                $('#postTitle').val(post_data[1])
+                $('#postCategory').val(post_data[2])
+                $("#editor").html(post_data[3]);
+            });
+        {% endif %}
+
+    </script>
+
+{% endblock content %}

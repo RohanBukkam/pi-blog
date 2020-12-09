@@ -1,12 +1,14 @@
-from flask import Flask
+from flask import Flask, jsonify, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
+from flask_marshmallow import Marshmallow
 import os
 
 # App config
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
+ma = Marshmallow(app)
 app.config.from_pyfile('config.cfg')
 
 # Google Cloud SQL (change this accordingly)
@@ -20,7 +22,7 @@ app.config.from_pyfile('config.cfg')
 # app.config['GOOGLE_LOGIN_CLIENT_ID'] = os.environ.get('GOOGLE_LOGIN_CLIENT_ID')
 # app.config['GOOGLE_LOGIN_CLIENT_SECRET'] = os.environ.get('GOOGLE_LOGIN_CLIENT_SECRET')
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+# # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 # app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 db = SQLAlchemy(app)

@@ -1,0 +1,181 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row m-0 mt-5">
+
+        <div class="col-xl-10 mx-auto">
+            <div class="row">
+
+                <div class="col-lg-9">
+
+                    <div class="row">
+
+                        <div class="col-md-12 mb-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="card-title">{{ post.title }}</h3>
+                                    <p class="card-text ">
+
+                                    <div class="d-flex">
+                                        <small class="text-muted text-truncate"
+                                               style="max-width: 33%;">{{ post.category }} </small><small
+                                            class="px-2">|</small>
+                                        <small class="text-muted text-truncate"
+                                               style="max-width: 33%;">{{ post.user.name }}</small><small
+                                            class="px-2">|</small>
+                                        <small class="text-muted text-truncate"
+                                               style="max-width: 33%;">{{ post.date_posted.strftime('%d %b, %Y') }}</small>
+                                    </div>
+                                    <div class="d-flex pt-2">
+                                        <span class="badge badge-pill badge-info text-truncate px-3"
+                                              data-toggle="tooltip" data-placement="top" title="Tooltip on top"
+                                              id="read-time"></span>
+                                    </div>
+                                    </p>
+                                    <p class="card-text" id="post">
+                                        {{ post.content|safe }}
+                                    </p>
+                                    <button type="button" class="btn btn-secondary my-3">Like <i
+                                            class="material-icons align-middle">thumb_up</i></button>
+                                    {% if ((current_user.is_authenticated) and (current_user.id==post.user.id)) %}
+                                        <a class="btn btn-secondary my-3"
+                                           href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+                                        <button type="button" class="btn btn-secondary my-3" data-toggle="modal"
+                                                data-target="#deleteModal">Delete
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                                            <input class="btn btn-danger" type="submit" value="Delete">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 my-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 id="comment-title" class="card-title">Comments</h3>
+                                    <div class="form-group">
+                                        <textarea class="form-control" style="overflow-x: auto;" id="commentContent"
+                                                  rows="3" required="required"></textarea>
+                                        {% if current_user.is_authenticated %}
+                                            <button id="newComment" type="button" class="btn btn-primary my-3">Comment
+                                            </button>
+                                        {% else %}
+{#                                            <button id="newCommentNotSignin" type="button" class="btn btn-primary my-3">#}
+{#                                                <a class="btn-primary" href="{{ url_for('login', post_id=post.id ) }}"#}
+{#                                                   style="text-decoration : none">Comment</a>#}
+{#                                            </button>#}
+                                            <form  method = "POST" action = "{{ url_for('commentSingin', post_id=post.id) }}">
+                                            <button id="newCommentNotSignin" type="submit" class="btn btn-primary my-3">Comment</button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <div id="commentsData" class="col-12 p-0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 d-lg-block d-none">
+                    <ul class="list-group shadow-sm">
+                        <li class="list-group-item"><a class="text-dark" href="#">Technology<span
+                                class="badge badge-danger float-right">New</span></a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">New Arrivals</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">Code Snippets</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">AWS</a></li>
+                        <li class="list-group-item"><a class="text-dark" href="#">GCP</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='assets/js/read-time.js') }}"></script>
+    {#    <script>readTime.reflect("post", "read-time");</script>#}
+
+    <script>
+        {# To prepopulate the comments for the post #}
+        $(window).on('load', function () {
+            var req = $.ajax({
+                url: '/post/' + '{{ post.id }}' + '/getcomment',
+                type: 'POST',
+                data: {post_id: {{ post.id }}}
+            });
+            req.done(commentsData);
+        });
+
+        {# To hide/unhide comments section #}
+        $("#comment-button").click(function () {
+            if ($("#comment-box").is(":hidden"))
+                $("#comment-box").show("slow");
+            else
+                $("#comment-box").hide();
+        });
+
+        {# To display comment in the tag commentsData #}
+
+        function commentsData(data) {
+            $("#comment-title").text("Comments (" + Object.keys(data.comments).length + ")");
+            $('#commentsData').empty();
+            var newHTML = '';
+            $.each($(data.comments).get().reverse(), function (i, obj) {
+                let commentLength = Object.keys(data.owners).length;
+                newHTML +=
+                    '<div class="card">' +
+                    '    <div class="card-body">' +
+                    '        <b>' + obj.content + '</b>' +
+                    '        <div class="d-flex">' +
+                    '            <small class="text-muted text-truncate" style="max-width: 33%;">' + data.owners[commentLength - i - 1].name + '</small><small class="px-2">|</small>' +
+                    '            <small class="text-muted text-truncate" style="max-width: 33%;">' + new Date(obj.date).toString().split("GMT")[0] + '</small>' + '</small><small class="px-2">|</small>' +
+                    '            <small class="text-muted text-truncate" style="max-width: 33%;">' + obj.sentiment + '</small>' +
+                    '        </div>' +
+                    '    </div>' +
+                    '</div>';
+            });
+            $('#commentsData').html(newHTML);
+        }
+
+        {# To add new comment for post #}
+        $('#newComment').click(function () {
+            var commentContent = $('#commentContent').val();
+            {% if current_user.is_authenticated %}
+                if (commentContent == '') {
+                    alert('Comment cannot be empty');
+                    return false;
+                }
+            {% endif %}
+            $('#commentContent').val('');
+            var req = $.ajax({
+                url: '/post/' + '{{ post.id }}' + '/addcomment',
+                type: 'POST',
+                data: {commentContent: commentContent}
+            });
+            req.done(commentsData);
+        });
+
+    </script>
+
+{% endblock content %}

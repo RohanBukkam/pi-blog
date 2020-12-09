@@ -18,6 +18,7 @@
                 <img src="{{ current_user.profile_picture }}" />
             {% endif %}
             <p><a href="{{ url_for('logout') }}">Logout</a></p>
+            <p><a href="{{ url_for('home') }}">Home</a></p>
         {% else %}
             <h2>I don't know you!</h2>
             <p><a href="{{ url_for('login') }}">Login</a></p>
