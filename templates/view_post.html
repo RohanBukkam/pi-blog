@@ -1,13 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-      </div>
-      <h2 class="article-title">{{ post.title }}</h2>
-      <p class="article-content">{{ post.content }}</p>
-    </div>
-  </article>
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
+            </div>
+            <h2 class="article-title">{{ post.title }}</h2>
+            <p class="article-content">{{ post.content }}</p>
+            <button><a class="article-title" href="{{ url_for('view_post', post_id=post.id) }}">Like</a></button>
+            {#            {% for comment in comments %}#}
+            {#                <div style="border: solid">#}
+            {#                    <p>{{ comment.id }}</p>#}
+            {#                    <p>{{ comment.content }}</p>#}
+            {#                    <p class="article-content">{{ comment.date.strftime('%d-%m-%Y') }}</p>#}
+            {#                    <p class="article-content">{{ comment.sentiment }}</p>#}
+            {#                </div>#}
+            {#            {% endfor %}#}
 
+            {% if current_user.is_authenticated %}
+            <button><a id="comment-button" class="article-title" {#href="{{ url_for('comment', post_id=post.id) }}"#}>Comment</a></button>
+            {% else %}
+                <button><a id="comment-button" class="article-title" href="{{ url_for('comment', post_id=post.id, ) }}">Comment</a></button>
+            {% endif %}
+            <div id="comment-box" style="display: none">
+
+                <input type="text" class="form-control" name="content" id="commentContent">
+                <button id="newComment" type="submit" class="btn btn-primary">Submit</button>
+
+            </div>
+            <div id="commentsData"></div>
+        </div>
+    </article>
+
+    <script>
+       {# To prepopulate the comments for the post #}
+        window.onload = function () {
+            var req = $.ajax({
+                url: '/post/' + '{{ post.id }}' + '/getcomment',
+                type: 'POST',
+                data: {post_id: {{ post.id }}}
+            });
+            req.done(commentsData);
+        };
+
+        {# To hide/unhide comments section #}
+        $("#comment-button").click(function () {
+            if ($("#comment-box").is(":hidden"))
+                $("#comment-box").show("slow");
+            else
+                $("#comment-box").hide();
+        });
+
+        {# To display comment in the tag commentsData #}
+        function commentsData(data) {
+            $('#commentsData').empty();
+            var newHTML = '';
+            $.each(data.comments, function (i, obj) {
+                newHTML += '<div style="border:solid">' +
+                    '<div class="id">Comment ID: ' + obj.id + '</div>' +
+                    '<div class="name">Name: ' + data.owners[i].name + '</div>' +
+                    '<div class="username">Username: ' + data.owners[i].username + '</div>' +
+                    '<div class="content">Comment: ' + obj.content + '</div>' +
+                    '<div class="date">Date: ' + obj.date + '</div>' +
+                    '<div class="sentiment">Sentiment: ' + obj.sentiment + '</div>' +
+                    '</div>';
+            });
+            $('#commentsData').html(newHTML);
+        }
+
+        {# To add new comment for post #}
+        $('#newComment').click(function () {
+            var commentContent = $('#commentContent').val();
+            $('#commentContent').val('');
+            var req = $.ajax({
+                url: '/post/' + '{{ post.id }}' + '/addcomment',
+                type: 'POST',
+                data: {commentContent: commentContent}
+            });
+            req.done(commentsData);
+        });
+
+    </script>
 {% endblock content %}
