@@ -7,6 +7,8 @@ from flask import jsonify
 from SentimentAnalysisLoadData import load_tokenizer, load_model, get_sentiment_prediction
 
 app = Flask(__name__)
+model = load_model()
+tokenizer = load_tokenizer()
 
 
 @app.route('/')
@@ -21,8 +23,6 @@ def wordsentiment(text):
     """
 
     wordString = text
-    model = load_model()
-    tokenizer = load_tokenizer()
     sentiment, score = get_sentiment_prediction(model, tokenizer, wordString)
     return sentiment
 
