@@ -219,7 +219,6 @@ def comment(post_id):
     db.session.add(comment)
     db.session.commit()
     flash("Your comment has been added to the post", "success")
-
     comments = Comment.query.filter_by(post_id=post_id)
     comment_schema = CommentSchema(many=True)
     json_comment_list = comment_schema.dump(comments)

@@ -3,10 +3,11 @@
 
     <div class="row m-0 mt-5">
         <div class="col-xl-10 mx-auto">
-            <h3>Add Post</h3>
             {% if legend == 'Update Post' %}
+                <h3>Update Post</h3>
                 <form id="post-form" method="POST" action="{{ url_for('update_post', post_id=post_data[0] ) }}">
             {% else %}
+                <h3>Add Post</h3>
                 <form id="post-form" method="POST" action="{{ url_for('new_post') }}">
             {% endif %}
             <div class="row">

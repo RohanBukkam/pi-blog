@@ -168,6 +168,7 @@
                 }
             {% endif %}
             $('#commentContent').val('');
+
             var req = $.ajax({
                 url: '/post/' + '{{ post.id }}' + '/addcomment',
                 type: 'POST',
